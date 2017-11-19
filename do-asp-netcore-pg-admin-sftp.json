@@ -1,0 +1,28 @@
+{
+  "builders": [
+    {
+      "type": "digitalocean",
+      "ssh_username": "root",
+      "api_token": "{{ user `secret_api_token` }}",
+      "image": "ubuntu-16-04-x64",
+      "region": "nyc3",
+      "size": "512mb"
+    }
+  ],
+  "provisioners": [
+    {
+      "destination": "/tmp/tmp.txt",
+      "source": "./file/tmp.txt",
+      "type": "file"
+    },
+    {
+      "type": "shell",
+      "inline": [
+        "### NOTES ###",
+        "# image_id: 21669205 - UBUNTU 16.04",
+        "cd ~",
+        "echo hello world"
+      ]
+    }
+  ]
+}
