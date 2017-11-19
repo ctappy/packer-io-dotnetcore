@@ -11,17 +11,55 @@
   ],
   "provisioners": [
     {
-      "destination": "/tmp/tmp.txt",
-      "source": "./file/tmp.txt",
+      "source": "./files/kestrel-aspnetcore.service",
+      "destination": "/tmp/kestrel-aspnetcore.service",
+      "type": "file"
+    },
+    {
+      "source": "./files/aspnetcore.conf",
+      "destination": "/tmp/aspnetcore.conf",
       "type": "file"
     },
     {
       "type": "shell",
       "inline": [
+        "### SETUP ###",
+
+        "### TODO ###",
+        "# Change password for sftp user account",
+
         "### NOTES ###",
-        "# image_id: 21669205 - UBUNTU 16.04",
-        "cd ~",
-        "echo hello world"
+        "# Digital Ocean is using root, does not need sudo",
+        "# service for aspnetcore is kestrel-aspnetcore",
+
+        "### VARIABLES ###",
+        "export PACKER_SFTP_PASSWORD=change_me_12345",
+        "export PACKER_DOTNET_INSTALL_PACKAGE=dotnet-dev-2.0.0",
+
+        "### START ###",
+
+        "# SETUP SFTP",
+        "useradd -m sftp_user",
+        "echo sftp_user:$PACKER_SFTP_PASSWORD | chpasswd",
+
+        "# SETUP DOT NET",
+        "echo deb [arch=amd64] https://apt-mo.trafficmanager.net/repos/dotnet-release/ trusty main > /etc/apt/sources.list.d/dotnetdev.list",
+        "apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys 417A0893",
+        "apt-get update",
+        "apt-get install $PACKER_DOTNET_INSTALL_PACKAGE -y",
+        "apt-get install apache2 -y",
+        "a2enmod proxy proxy_http proxy_html",
+        "mv /tmp/aspnetcore.conf /etc/apache2/conf-available/aspnetcore.conf",
+        "ln -s /etc/apache2/conf-available/aspnetcore.conf /etc/apache2/conf-enabled/",
+        "systemctl restart apache2",
+        "mkdir ~/aspnetcore",
+        "cd ~/aspnetcore && dotnet new mvc",
+        "cd ~/aspnetcore && dotnet publish",
+        "cp -a ~/aspnetcore/bin/Debug/netcoreapp2.0/publish/ /var/www/aspnetcore",
+        "mv /tmp/kestrel-aspnetcore.service /etc/systemd/system/kestrel-aspnetcore.service",
+        "systemctl daemon-reload",
+        "systemctl enable kestrel-aspnetcore",
+        "systemctl start kestrel-aspnetcore"
       ]
     }
   ]

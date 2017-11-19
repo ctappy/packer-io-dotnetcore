@@ -1,0 +1,12 @@
+[Unit]
+Description=Example ASP .NET Web Application running on Ubuntu 16.04
+[Service]
+WorkingDirectory=/var/www/aspnetcore
+ExecStart=/usr/bin/dotnet /var/www/aspnetcore/aspnetcore.dll
+Restart=always
+RestartSec=10
+SyslogIdentifier=dotnet
+User=www-data
+Environment=ASPNETCORE_ENVIRONMENT=Production
+[Install]
+WantedBy=multi-user.target
