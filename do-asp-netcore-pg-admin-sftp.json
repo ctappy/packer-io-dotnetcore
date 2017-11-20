@@ -21,33 +21,44 @@
       "type": "file"
     },
     {
+      "source": "./files/postgres-install.yml",
+      "destination": "/tmp/postgres-install.yml",
+      "type": "file"
+    },
+    {
       "type": "shell",
+       "environment_vars": [
+        "PACKER_SFTP_USERNAME=sftp_user",
+        "PACKER_SFTP_PASSWORD=change_me_12345",
+        "PACKER_SFTP_USER_ROOT_LOGIN_DIR=/",
+        "PACKER_DOTNET_INSTALL_PACKAGE=dotnet-dev-2.0.0",
+        "PACKER_DB_NAME=aspnetcore",
+        "PACKER_DB_USERNAME=aspnetcore",
+        "PACKER_DB_PASSWORD=change_me_12345"
+    ],
       "inline": [
         "### SETUP ###",
 
         "### TODO-INIT SETUP ###",
-        "# Change password for sftp user account see ### VARIABLES ###",
+        "# Change password for sftp user account see environment_vars",
 
         "### NOTES ###",
         "# Digital Ocean is using root, does not need sudo",
         "# $PACKER_SFTP_USERNAME is set up as root user, see ## ENABLE SFTP_USER AS ROOT USER",
         "# service for aspnetcore is kestrel-aspnetcore",
 
-        "### VARIABLES ###",
-        "export PACKER_SFTP_USERNAME=sftp_user",
-        "export PACKER_SFTP_PASSWORD=change_me_12345",
-        "export PACKER_SFTP_USER_ROOT_LOGIN_DIR=/",
-        "export PACKER_DOTNET_INSTALL_PACKAGE=dotnet-dev-2.0.0",
-
         "### START ###",
 
         "# SETUP POSTGRES",
         "wget https://bootstrap.pypa.io/get-pip.py",
         "python3 ./get-pip.py",
-        "pip install paramiko",
-        "pip install ansible",
-        "pip install psycopg2",
+        "pip install paramiko ansible psycopg2",
         "ansible-galaxy install geerlingguy.postgresql",
+        "ansible-playbook postgres-setup.yml -e \"{'postgresql_databases':[{'name': \'$PACKER_DB_NAME\'}] 'postgresql_users':[{ 'name': \'$PACKER_DB_USERNAME\', 'password': \'$PACKER_DB_PASSWORD\'}]}\"",
+
+        "# SETUP PHPPGADMIN",
+        "apt-get install -y phppgadmin",
+
 
         "# SETUP SFTP",
         "useradd -m $PACKER_SFTP_USERNAME",
