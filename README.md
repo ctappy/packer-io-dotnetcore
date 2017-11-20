@@ -16,7 +16,7 @@ PhpPgAdmin url will be located at `<IP.AD.DR.ESS>:81/phppgadmin/`
 - dotnet core
 - sftp
 - postgres
-- mypgadmin
+- phppgadmin
 - apache reverse proxy
 
 
@@ -40,6 +40,3 @@ Create the file secrets.json with the following content, and update the api toke
 ```
 packer-io build -var-file=secrets.json do-asp-netcore-pg-admin-sftp.json
 ```
-
-## PhpPgAdmin
-T
