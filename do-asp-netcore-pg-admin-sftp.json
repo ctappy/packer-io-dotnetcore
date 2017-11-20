@@ -41,12 +41,8 @@
       "inline": [
         "### SETUP ###",
 
-        "### TODO-INIT SETUP ###",
-        "# Change password for sftp user account see environment_vars",
-
         "### NOTES ###",
         "# Digital Ocean is using root, does not need sudo",
-        "# $PACKER_SFTP_USERNAME is set up as root user, see ## ENABLE SFTP_USER AS ROOT USER",
         "# service for aspnetcore is kestrel-aspnetcore",
 
         "### START ###",
