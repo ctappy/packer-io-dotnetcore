@@ -50,31 +50,19 @@
 
         "### START ###",
 
-        "# SETUP POSTGRES",
-        "wget https://bootstrap.pypa.io/get-pip.py",
-        "python3 ./get-pip.py",
-        "pip install paramiko ansible psycopg2",
-        "ansible-galaxy install geerlingguy.postgresql",
-        "ansible-playbook /tmp/postgres-install.yml -e \"{'postgresql_databases':[{'name': \\'$PACKER_DB_NAME\\'}], 'postgresql_users':[{ 'name': \\'$PACKER_DB_USERNAME\\', 'password': \\'$PACKER_DB_PASSWORD\\'}]}\"",
-
-        "# SETUP PHPPGADMIN",
-        "apt-get install -y phppgadmin",
-
-
         "# SETUP SFTP",
         "useradd -m $PACKER_SFTP_USERNAME",
         "usermod -aG www-data $PACKER_SFTP_USERNAME",
         "echo $PACKER_SFTP_USERNAME:$PACKER_SFTP_PASSWORD | chpasswd",
         "## ADD USER TO SSHD",
-        "echo | /etc/ssh/sshd_config",
-        "echo Match User $PACKER_SFTP_USERNAME >> /etc/ssh/sshd_config",
-        "echo ForceCommand internal-sftp >> /etc/ssh/sshd_config",
-        "echo PasswordAuthentication yes >> /etc/ssh/sshd_config",
-        "echo ChrootDirectory $PACKER_SFTP_USER_ROOT_LOGIN_DIR >> /etc/ssh/sshd_config",
-        "echo PermitTunnel no >> /etc/ssh/sshd_config",
-        "echo AllowAgentForwarding no >> /etc/ssh/sshd_config",
-        "echo AllowTcpForwarding no >> /etc/ssh/sshd_config",
-        "echo X11Forwarding no >> /etc/ssh/sshd_config",
+        "echo Match User $PACKER_SFTP_USERNAME |sudo tee -a /etc/ssh/sshd_config",
+        "echo ForceCommand internal-sftp |sudo tee -a /etc/ssh/sshd_config",
+        "echo PasswordAuthentication yes |sudo tee -a /etc/ssh/sshd_config",
+        "echo ChrootDirectory $PACKER_SFTP_USER_ROOT_LOGIN_DIR |sudo tee -a /etc/ssh/sshd_config",
+        "echo PermitTunnel no |sudo tee -a /etc/ssh/sshd_config",
+        "echo AllowAgentForwarding no |sudo tee -a /etc/ssh/sshd_config",
+        "echo AllowTcpForwarding no |sudo tee -a /etc/ssh/sshd_config",
+        "echo X11Forwarding no |sudo tee -a /etc/ssh/sshd_config",
         "systemctl restart sshd",
 
         "# SETUP DOT NET AND APACHE REVERSE PROXY",
@@ -96,7 +84,18 @@
         "mv /tmp/kestrel-aspnetcore.service /etc/systemd/system/kestrel-aspnetcore.service",
         "systemctl daemon-reload",
         "systemctl enable kestrel-aspnetcore",
-        "systemctl start kestrel-aspnetcore"
+        "systemctl start kestrel-aspnetcore",
+
+        "# SETUP PHPPGADMIN",
+        "apt-get install -y phppgadmin",
+
+        "# SETUP POSTGRES",
+        "wget https://bootstrap.pypa.io/get-pip.py",
+        "python3 ./get-pip.py",
+        "pip install paramiko ansible psycopg2",
+        "ansible-galaxy install geerlingguy.postgresql",
+        "ansible-playbook /tmp/postgres-install.yml -e \"{'postgresql_databases':[{'name': \\'$PACKER_DB_NAME\\'}], 'postgresql_users':[{ 'name': \\'$PACKER_DB_USERNAME\\', 'password': \\'$PACKER_DB_PASSWORD\\'}]}\""
+
       ]
     }
   ]
