@@ -54,7 +54,7 @@
         "python3 ./get-pip.py",
         "pip install paramiko ansible psycopg2",
         "ansible-galaxy install geerlingguy.postgresql",
-        "ansible-playbook postgres-setup.yml -e \"{'postgresql_databases':[{'name': \'$PACKER_DB_NAME\'}] 'postgresql_users':[{ 'name': \'$PACKER_DB_USERNAME\', 'password': \'$PACKER_DB_PASSWORD\'}]}\"",
+        "ansible-playbook postgres-setup.yml -e \"{'postgresql_databases':[{'name': \\'$PACKER_DB_NAME\\'}] 'postgresql_users':[{ 'name': \\'$PACKER_DB_USERNAME\\', 'password': \\'$PACKER_DB_PASSWORD\\'}]}\"",
 
         "# SETUP PHPPGADMIN",
         "apt-get install -y phppgadmin",

@@ -13,9 +13,7 @@
 Create the file secrets.json with the following content, and update the api token veriable
 ```
 {
-    "variables": {
-        "secret_api_token":"123456789"
-    }
+  "secret_api_token":"123456789abc"
 }
 
 ```
