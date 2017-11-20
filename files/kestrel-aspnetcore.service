@@ -1,5 +1,5 @@
 [Unit]
-Description=Example ASP .NET Web Application running on Ubuntu 16.04
+Description=ASP .NET Web Application running on Ubuntu 16.04
 [Service]
 WorkingDirectory=/var/www/aspnetcore
 ExecStart=/usr/bin/dotnet /var/www/aspnetcore/aspnetcore.dll
