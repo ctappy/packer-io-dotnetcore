@@ -4,6 +4,7 @@
       "type": "digitalocean",
       "ssh_username": "root",
       "api_token": "{{ user `secret_api_token` }}",
+      "droplet_name": "net-core-sftp-pg",
       "image": "ubuntu-16-04-x64",
       "region": "nyc3",
       "size": "512mb"
@@ -54,7 +55,7 @@
         "python3 ./get-pip.py",
         "pip install paramiko ansible psycopg2",
         "ansible-galaxy install geerlingguy.postgresql",
-        "ansible-playbook postgres-setup.yml -e \"{'postgresql_databases':[{'name': \\'$PACKER_DB_NAME\\'}] 'postgresql_users':[{ 'name': \\'$PACKER_DB_USERNAME\\', 'password': \\'$PACKER_DB_PASSWORD\\'}]}\"",
+        "ansible-playbook /tmp/postgres-install.yml -e \"{'postgresql_databases':[{'name': \\'$PACKER_DB_NAME\\'}], 'postgresql_users':[{ 'name': \\'$PACKER_DB_USERNAME\\', 'password': \\'$PACKER_DB_PASSWORD\\'}]}\"",
 
         "# SETUP PHPPGADMIN",
         "apt-get install -y phppgadmin",

@@ -21,5 +21,5 @@ Create the file secrets.json with the following content, and update the api toke
 ## Run
 
 ```
-packer-io ./do-asp-netcore-pg-admin-sftp.json
+packer-io build -var-file=secrets.json do-asp-netcore-pg-admin-sftp.json
 ```
