@@ -18,7 +18,7 @@ PhpPgAdmin url will be located at `<IP.AD.DR.ESS>:81/phppgadmin/`
 - sftp
 - postgres
 - phppgadmin
-- apache reverse proxy
+- apache2
 
 
 ## Setup
