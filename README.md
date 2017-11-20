@@ -1,5 +1,11 @@
 # Packer setup for .net core
 
+## Notes
+
+dotnet core is using a reverse proxy to port 80, phppgadmin is set up on port 81
+
+PhpPgAdmin url will be located at `<IP.AD.DR.ESS>:81/phppgadmin/`
+
 ## Includes
 - ubuntu 16.04
 - dotnet core
@@ -29,3 +35,6 @@ Create the file secrets.json with the following content, and update the api toke
 ```
 packer-io build -var-file=secrets.json do-asp-netcore-pg-admin-sftp.json
 ```
+
+## PhpPgAdmin
+T
