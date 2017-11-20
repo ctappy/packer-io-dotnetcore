@@ -21,7 +21,7 @@ PhpPgAdmin url will be located at `<IP.AD.DR.ESS>:81/phppgadmin/`
 
 
 ## Setup
-Create the file secrets.json with the following content, and update the api token veriable
+Create the file secrets.json, update the following content
 ```
 {
   "secret_api_token":"123456789abc",
