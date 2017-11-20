@@ -1,0 +1,18 @@
+---
+- hosts: localhost
+  connection: localhost
+
+  vars:
+    postgresql_databases:
+      - name: netcoredb
+    postgresql_users:
+      - name: netcoredb
+        password: changeme_123456789
+
+  pre_tasks:
+    - name: Update apt cache.
+      apt: update_cache=yes cache_valid_time=600
+      when: ansible_os_family == 'Debian'
+
+  roles:
+    - geerlingguy.postgresql
