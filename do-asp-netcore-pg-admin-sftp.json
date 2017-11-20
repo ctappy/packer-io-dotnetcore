@@ -74,6 +74,7 @@
         "mv /tmp/aspnetcore.conf /etc/apache2/conf-available/aspnetcore.conf",
         "ln -s /etc/apache2/conf-available/aspnetcore.conf /etc/apache2/conf-enabled/",
         "systemctl restart apache2",
+        "systemctl enable apache2",
         "mkdir ~/aspnetcore",
         "cd ~/aspnetcore && dotnet new mvc",
         "cd ~/aspnetcore && dotnet publish",
