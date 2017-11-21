@@ -26,6 +26,7 @@ Create the file secrets.json, update the following content
 ```
 {
   "secret_api_token":"123456789abc",
+  "image_region": "nyc3",
   "sftp_username": "sftp_user",
   "sftp_password": "change_me_123",
   "sftp_user_root_login_dir": "/",

@@ -7,7 +7,7 @@
       "droplet_name": "building-image-net-core-sftp-pg",
       "snapshot_name": "packer .netcore {{isotime \"02-Jan-06 03:04:05\"}}",
       "image": "ubuntu-16-04-x64",
-      "region": "nyc3",
+      "region": "{{ user `image_region` }}",
       "size": "512mb"
     }
   ],
