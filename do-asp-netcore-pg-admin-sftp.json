@@ -99,7 +99,8 @@
         "ansible-playbook /tmp/postgres-install.yml -e \"{'postgresql_databases':[{'name': $PACKER_DB_NAME}], 'postgresql_users':[{ 'name': $PACKER_DB_USERNAME, 'password': $PACKER_DB_PASSWORD}]}\"",
         "# OPEN POSTGRES PORT 5432",
         "sed -i -e \"s/#listen_addresses = 'localhost'/listen_addresses = '*'/g\" /etc/postgresql/9.5/main/postgresql.conf",
-        "sed -i -e 's|127.0.0.1/32|0.0.0.0/0|g' /etc/postgresql/9.5/main/pg_hba.conf"
+        "sed -i -e 's|127.0.0.1/32|0.0.0.0/0|g' /etc/postgresql/9.5/main/pg_hba.conf",
+        "su - -c \"psql -c 'ALTER USER $PACKER_DB_USERNAME WITH SUPERUSER'\" postgres"
 
       ]
     }
