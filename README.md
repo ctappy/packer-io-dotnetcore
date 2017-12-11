@@ -2,7 +2,7 @@
 
 ## Notes
 
-If you add in a ssh key, I believe, digital ocean will change all of the
+If you add in a ssh key, digital ocean will change all of the
 `PasswordAuthentication yes` to `PasswordAuthentication no`. To enable sftp
 ssh into the server edit the last `PasswordAuthentication no` to
 `PasswordAuthentication yes` in the file `/etc/ssh/sshd_config`, restart
