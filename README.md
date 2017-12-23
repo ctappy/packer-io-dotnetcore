@@ -33,7 +33,7 @@ Create the file secrets.json, update the following content
   "db_name": "aspnetcore",
   "db_username": "aspnetcore",
   "db_password": "change_me_123",
-  "dotnet_install_package": "dotnet-dev-2.0.0"
+  "dotnet_install_package": "dotnet-sdk-2.0.3"
 }
 ```
 
