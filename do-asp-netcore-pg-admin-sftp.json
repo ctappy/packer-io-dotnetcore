@@ -29,80 +29,29 @@
     },
     {
       "type": "shell",
-       "environment_vars": [
+      "script": "scripts/sftp.sh",
+      "environment_vars": [
         "PACKER_SFTP_USERNAME={{ user `sftp_username` }}",
         "PACKER_SFTP_PASSWORD={{ user `sftp_password` }}",
-        "PACKER_SFTP_USER_ROOT_LOGIN_DIR={{ user `sftp_user_root_login_dir` }}",
-        "PACKER_DOTNET_INSTALL_PACKAGE={{ user `dotnet_install_package` }}",
+        "PACKER_SFTP_USER_ROOT_LOGIN_DIR={{ user `sftp_user_root_login_dir` }}"
+    ]
+    },
+    {
+      "type": "shell",
+      "script": "scripts/dotnet.sh",
+      "environment_vars": [
+        "PACKER_SFTP_USERNAME={{ user `sftp_username` }}",
+        "PACKER_DOTNET_INSTALL_PACKAGE={{ user `dotnet_install_package` }}"
+    ]
+    },
+    {
+      "type": "shell",
+      "script": "scripts/postgres.sh",
+      "environment_vars": [
         "PACKER_DB_NAME={{ user `db_name` }}",
         "PACKER_DB_USERNAME={{ user `db_username` }}",
         "PACKER_DB_PASSWORD={{ user `db_password` }}"
-    ],
-      "inline": [
-        "### SETUP ###",
-
-        "### NOTES ###",
-        "# Digital Ocean is using root, does not need sudo",
-        "# service for aspnetcore is kestrel-aspnetcore",
-
-        "### START ###",
-
-        "# SETUP SFTP",
-        "useradd -m $PACKER_SFTP_USERNAME",
-        "usermod -aG www-data $PACKER_SFTP_USERNAME",
-        "echo $PACKER_SFTP_USERNAME:$PACKER_SFTP_PASSWORD | chpasswd",
-        "## ADD USER TO SSHD",
-        "echo | tee -a /etc/ssh/sshd_config",
-        "echo Match User $PACKER_SFTP_USERNAME |tee -a /etc/ssh/sshd_config",
-        "echo ForceCommand internal-sftp |tee -a /etc/ssh/sshd_config",
-        "echo PasswordAuthentication yes |tee -a /etc/ssh/sshd_config",
-        "echo ChrootDirectory $PACKER_SFTP_USER_ROOT_LOGIN_DIR |tee -a /etc/ssh/sshd_config",
-        "echo PermitTunnel no |tee -a /etc/ssh/sshd_config",
-        "echo AllowAgentForwarding no |tee -a /etc/ssh/sshd_config",
-        "echo AllowTcpForwarding no |tee -a /etc/ssh/sshd_config",
-        "echo X11Forwarding no |tee -a /etc/ssh/sshd_config",
-        "systemctl restart sshd",
-
-        "# SETUP DOT NET AND APACHE REVERSE PROXY",
-        "echo deb [arch=amd64] https://packages.microsoft.com/repos/microsoft-ubuntu-xenial-prod xenial main > /etc/apt/sources.list.d/dotnetdev.list",
-        "curl https://packages.microsoft.com/keys/microsoft.asc | gpg --dearmor > /etc/apt/trusted.gpg.d/microsoft.gpg",
-        "apt-get update",
-        "apt-get install apache2 $PACKER_DOTNET_INSTALL_PACKAGE -y",
-        "a2enmod proxy proxy_http proxy_html",
-        "## SETUP ASPNETCORE",
-        "mv /tmp/aspnetcore.conf /etc/apache2/conf-available/aspnetcore.conf",
-        "ln -s /etc/apache2/conf-available/aspnetcore.conf /etc/apache2/conf-enabled/",
-        "systemctl restart apache2",
-        "systemctl enable apache2",
-        "mkdir ~/aspnetcore",
-        "cd ~/aspnetcore && dotnet new mvc",
-        "cd ~/aspnetcore && dotnet publish",
-        "cp -a ~/aspnetcore/bin/Debug/netcoreapp2.0/publish/ /var/www/aspnetcore",
-        "chown -R $PACKER_SFTP_USERNAME:$PACKER_SFTP_USERNAME /var/www/aspnetcore/",
-        "mv /tmp/kestrel-aspnetcore.service /etc/systemd/system/kestrel-aspnetcore.service",
-        "systemctl daemon-reload",
-        "systemctl enable kestrel-aspnetcore",
-        "systemctl start kestrel-aspnetcore",
-
-        "# SETUP PHPPGADMIN",
-        "apt-get install -y phppgadmin",
-        "sed -i -e 's/Require\\ local/Allow\\ From\\ all/g' /etc/apache2/conf-available/phppgadmin.conf",
-        "sed -i -e '1 a\\<VirtualHost *:82>' /etc/apache2/conf-available/phppgadmin.conf",
-        "sed -i -e '1 a\\Listen 82' /etc/apache2/conf-available/phppgadmin.conf",
-        "echo '</VirtualHost>' | tee -a /etc/apache2/conf-available/phppgadmin.conf",
-
-        "# SETUP POSTGRES",
-        "wget https://bootstrap.pypa.io/get-pip.py",
-        "python3 ./get-pip.py",
-        "pip install paramiko ansible psycopg2",
-        "ansible-galaxy install geerlingguy.postgresql",
-        "ansible-playbook /tmp/postgres-install.yml -e \"{'postgresql_databases':[{'name': $PACKER_DB_NAME}], 'postgresql_users':[{ 'name': $PACKER_DB_USERNAME, 'password': $PACKER_DB_PASSWORD}]}\"",
-        "# OPEN POSTGRES PORT 5432",
-        "sed -i -e \"s/#listen_addresses = 'localhost'/listen_addresses = '*'/g\" /etc/postgresql/9.5/main/postgresql.conf",
-        "sed -i -e 's|127.0.0.1/32|0.0.0.0/0|g' /etc/postgresql/9.5/main/pg_hba.conf",
-        "su - -c \"psql -c 'ALTER USER $PACKER_DB_USERNAME WITH SUPERUSER'\" postgres"
-
-      ]
+    ]
     }
   ]
 }
