@@ -5,8 +5,8 @@ set -ex
 # SETUP PHPPGADMIN
 apt-get install -y phppgadmin
 sed -i -e 's/Require\ local/Allow\ From\ all/g' /etc/apache2/conf-available/phppgadmin.conf
-sed -i -e '1 a\<VirtualHost *:82>' /etc/apache2/conf-available/phppgadmin.conf
-sed -i -e '1 a\Listen 82' /etc/apache2/conf-available/phppgadmin.conf
+sed -i -e '1 a\<VirtualHost *:81>' /etc/apache2/conf-available/phppgadmin.conf
+sed -i -e '1 a\Listen 81' /etc/apache2/conf-available/phppgadmin.conf
 echo '</VirtualHost>' | tee -a /etc/apache2/conf-available/phppgadmin.conf
 # SETUP POSTGRES
 wget https://bootstrap.pypa.io/get-pip.py
