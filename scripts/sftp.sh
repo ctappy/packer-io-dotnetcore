@@ -15,4 +15,9 @@ echo ChrootDirectory $PACKER_SFTP_USER_ROOT_LOGIN_DIR |tee -a /etc/ssh/sshd_cone
 echo AllowAgentForwarding no |tee -a /etc/ssh/sshd_config
 echo AllowTcpForwarding no |tee -a /etc/ssh/sshd_config
 echo X11Forwarding no |tee -a /etc/ssh/sshd_config
+echo '#!/bin/sh -e' > /etc/rc.local
+echo "sed -i '0,/PasswordAuthentication no/! s/PasswordAuthentication no/PasswordAuthentication yes/' /etc/ssh/sshd_config" >> /etc/rc.local
+echo 'rm /etc/rc.local' >> /etc/rc.local
+echo 'touch /etc/rc.local' >> /etc/rc.local
+echo 'exit 0' >> /etc/rc.local
 systemctl restart sshd
