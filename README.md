@@ -2,6 +2,12 @@
 
 ## Notes
 
+If you add in a ssh key, digital ocean will change all of the
+`PasswordAuthentication yes` to `PasswordAuthentication no`. To enable sftp
+ssh into the server edit the last `PasswordAuthentication no` to
+`PasswordAuthentication yes` in the file `/etc/ssh/sshd_config`, restart
+`systemctl restart sshd` and the created sftp user account can log in.
+
 dotnet core is using a reverse proxy to port 80, phppgadmin is set up on port 81
 
 PhpPgAdmin url will be located at `<IP.AD.DR.ESS>:81/phppgadmin/`
